@@ -54,7 +54,7 @@
     </select>
 
     <label for="score">Enter Test Score:</label>
-    <input type="text" id="score" placeholder="e.g., K.3, 5.0, 12.5">
+    <input type="text" id="score" placeholder="e.g., K.3, 5.0, 1.0-">
 
     <button onclick="interpretScore()">Interpret Score</button>
 
@@ -78,18 +78,28 @@
           else if (score === "B") classification = "Borderline Readiness";
           else if (score === "C") classification = "Not Ready";
           break;
-
-        case "Grade1":
-          if (score === "PK") classification = "Poor";
-          else if (score.startsWith("K.")) {
-            const kScore = parseFloat(score.split(".")[1]);
-            if (kScore >= 0 && kScore <= 5) classification = "Below Average";
-            else if (kScore >= 6 && kScore <= 9) classification = "Low Average";
-          } else if (score >= 3.6) classification = "Superior";
-          else if (score >= 2.7) classification = "Above Average";
-          else if (score >= 1.6) classification = "High Average";
-          else if (score >= 1.0) classification = "Average";
-          break;
+		  
+		case "Grade1":
+		  if (typeof score === "string") {
+			if (score === "PK") {
+			  classification = "Poor";
+			} else if (score.startsWith("K.")) {
+			  const kScore = parseFloat(score.split(".")[1]);
+			  if (!isNaN(kScore)) {
+				if (kScore >= 0 && kScore <= 5) classification = "Below Average";
+				else if (kScore >= 6 && kScore <= 9) classification = "Low Average";
+			  }
+			}
+		  } else if (typeof score === "number") {
+			if (score >= 3.6) classification = "Superior";
+			else if (score >= 2.7) classification = "Above Average";
+			else if (score >= 1.6) classification = "High Average";
+			else if (score >= 1.0) classification = "Average";
+		  }
+		  if (!classification) {
+			classification = "Invalid Score";
+		  }
+		  break;		  
 
         case "Grade2":
 		  if (score === "1.0-") classification = "Poor";			
