@@ -30,15 +30,24 @@
       width: 100px;
       height: auto;
     }
+	.ict {
+      position: absolute;
+      top: 130px;
+      left: 20px;
+      width: 100px;
+      height: auto;
+    }	
 
   </style>
 </head>
 <body>
-  <img src="SHS-AdC_logo.png" alt="Logo" class="logo">
+  <img src="SHS-AdC_logo.png" alt="SHS-AdC Logo" class="logo">
+  <img src="ICTlogo.jpg" alt="ICT Logo" class="ict">
   <div class="container">
-    <h1>Test Score Quality Index</h1>
+    <h1>Test Score Interpretation App</h1>
+	<h4>Prototype app by: SHS-AdC ICT SysAdmin</h4>
     <label for="gradeLevel">Select Grade Level:</label>
-    <select id="gradeLevel">
+    <select id="gradeLevel" onchange="updatePlaceholder()">
       <option value="EEd">Nursery 1, Nursery 2, Kinder</option>
       <option value="Grade1">Grade 1</option>
       <option value="Grade2">Grade 2</option>
@@ -54,7 +63,7 @@
     </select>
 
     <label for="score">Enter Test Score:</label>
-    <input type="text" id="score" placeholder="e.g., K.3, 5.0, 1.0-">
+    <input type="text" id="score" style="width:300px" placeholder="Enter score (A, B, C)">
 
     <button onclick="interpretScore()">Interpret Score</button>
 
@@ -62,6 +71,32 @@
   </div>
 
   <script>
+  function updatePlaceholder() {
+    const gradeLevel = document.getElementById("gradeLevel").value;
+    const scoreInput = document.getElementById("score");
+
+    // Placeholder text based on grade level
+    const placeholders = {
+      EEd: "Enter score (A, B, C)",
+      Grade1: "Enter score (PK, K.0 to K.9, 1.0 and above)",
+      Grade2: "Enter score (1.0-, 1.0 and above)",
+      Grade3: "Enter score (1.0-, 1.0 and above)",
+      Grade4: "Enter score here",
+      Grade5: "Enter score here",
+      Grade6: "Enter score",
+      Grade7: "Enter score (e.g. Pk, 2.9, 12.9+)",
+      Grade8: "Enter score here",
+      Grade9: "Enter score here",
+      Grade10: "Enter score here",
+      SHS: "Enter score (1-9)",
+    };
+
+    // Update the placeholder based on the selected grade level
+	document.getElementById("score").value = ""; // Clear the content of score
+	document.getElementById("result").innerHTML = ""; // Clear the content of result
+    scoreInput.placeholder = placeholders[gradeLevel] || "Enter score here";
+  }
+  
     function interpretScore() {
       const gradeLevel = document.getElementById("gradeLevel").value;
       const scoreInput = document.getElementById("score").value.trim();
@@ -109,28 +144,27 @@
           else if (score >= 2.0) classification = "Average";
           else if (score >= 1.5) classification = "Low Average";
           else if (score >= 1.0) classification = "Below Average";
-          else classification = "Poor";
           break;
 
         case "Grade3":
+		  if (score === "1.0-") classification = "Poor";					
 		  if (score === "8.0+" || (score >= 7.0)) classification = "Superior";			  
           else if (score >= 6.0) classification = "Above Average";
           else if (score >= 5.0) classification = "High Average";
           else if (score >= 3.0) classification = "Average";
           else if (score >= 2.0) classification = "Low Average";
           else if (score >= 1.0) classification = "Below Average";
-          else classification = "Poor";
           break;
 
-        case "Grade4":
-		  if (score === "9.5+" || (score >= 7.0)) classification = "Superior";		
-          else if (score >= 6.0) classification = "Above Average";
-          else if (score >= 5.0) classification = "High Average";
-          else if (score >= 4.0) classification = "Average";
-          else if (score >= 3.0) classification = "Low Average";
-          else if (score >= 2.9) classification = "Below Average";
-          else classification = "Poor";
-          break;
+		case "Grade4":
+		  if (score === "9.5+" || (score >= 7.0 && score <= 9.5)) classification = "Superior";
+		  else if (score >= 6.0 && score <= 6.9) classification = "Above Average";
+		  else if (score >= 5.0 && score <= 5.9) classification = "High Average";
+		  else if (score >= 4.0 && score <= 4.9) classification = "Average";
+		  else if (score >= 3.0 && score <= 3.9) classification = "Low Average";
+		  else if (score >= 2.9 && score < 3.0) classification = "Below Average";
+		  else if (score <= 2.8) classification = "Poor";
+		  break;
 
         case "Grade5":
 		  if (score === "9.5+" || (score >= 8.0)) classification = "Superior";		
@@ -140,7 +174,7 @@
           else if (score >= 5.0) classification = "Average";
           else if (score >= 4.0) classification = "Low Average";
           else if (score >= 3.0) classification = "Below Average";
-          else classification = "Poor";
+		  else if (score <= 2.9) classification = "Poor";
           break;
 
         case "Grade6":
@@ -150,7 +184,7 @@
           else if (score >= 6.0) classification = "Average";
           else if (score >= 5.0) classification = "Low Average";
           else if (score >= 3.5) classification = "Below Average";
-          else classification = "Poor";
+		  else if (score <= 3.4) classification = "Poor";
           break;
 
         case "Grade7":
