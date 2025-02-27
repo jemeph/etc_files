@@ -83,7 +83,7 @@
       Grade3: "Enter score (1.0-, 1.0 and above)",
       Grade4: "Enter score here",
       Grade5: "Enter score here",
-      Grade6: "Enter score",
+      Grade6: "Enter score here",
       Grade7: "Enter score (e.g. Pk, 2.9, 12.9+)",
       Grade8: "Enter score here",
       Grade9: "Enter score here",
@@ -194,7 +194,7 @@
           else if (score >= 7.0 && score <= 8.9) classification = "Average";
           else if (score >= 5.0 && score <= 6.9) classification = "Low Average";
           else if (score >= 3.0 && score <= 4.9) classification = "Below Average";
-          else if (score === "Pk" || (score >= 0 && score <= 2.9)) classification = "Poor";
+          else if (score.toUpperCase() === "Pk" || (score >= 0 && score <= 2.9)) classification = "Poor";
           break;
 
         case "Grade8":
